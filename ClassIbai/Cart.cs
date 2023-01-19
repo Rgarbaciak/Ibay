@@ -13,7 +13,13 @@ namespace ClassIbai
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public List<CartItem> Items { get; set; } = new List<CartItem>();
+        public virtual User User { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
+
+        public Cart()
+        {
+            this.Products = new List<Product>();
+        }
     }
 
 

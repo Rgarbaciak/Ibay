@@ -7,10 +7,10 @@ namespace IbayApi.Services
 {
     public class IbayContext : DbContext
     {
-        public DbSet<Cart> Classrooms { get; set; }
-        public DbSet<CartItem> People { get; set; }
-        public DbSet<Product> Students { get; set; }
-        public DbSet<User> Teachers { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         public IbayContext(DbContextOptions<IbayContext> options) : base(options)
         { }

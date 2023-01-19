@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClassIbai\ClassIbai.csproj" />
+    <ProjectReference Include="..\ClassIbai\ClassIbay.csproj" />
   </ItemGroup>
 
 </Project>

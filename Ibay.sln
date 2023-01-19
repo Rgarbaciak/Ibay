@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ibay", "Ibay\Ibay.csproj", "{291418DB-78AD-4FBB-B21D-77FDE4E106E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ibay", "Ibay\Ibay.csproj", "{291418DB-78AD-4FBB-B21D-77FDE4E106E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassIbai", "ClassIbai\ClassIbai.csproj", "{05A26ABD-81CE-48F8-B367-E1B90DB36BF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassIbay", "ClassIbai\ClassIbay.csproj", "{05A26ABD-81CE-48F8-B367-E1B90DB36BF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

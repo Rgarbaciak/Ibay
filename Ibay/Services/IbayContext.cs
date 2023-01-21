@@ -1,4 +1,4 @@
-﻿using ClassIbai;
+﻿using ClassIbay;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

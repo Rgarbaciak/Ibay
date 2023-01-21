@@ -2,11 +2,13 @@
 
 namespace Ibay.Controllers
 {
-    public class PayementController : Controller
+    public class PaymentController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
+       
+
     }
 }

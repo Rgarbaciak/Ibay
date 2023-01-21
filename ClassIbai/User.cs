@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ClassIbai
+namespace ClassIbay
 {
     [Table("User")]
     public class User

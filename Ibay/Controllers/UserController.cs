@@ -1,12 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+using Microsoft.EntityFrameworkCore;
+using ClassIbay;
+using IbayApi.Services;
 
 namespace Ibay.Controllers
 {
-    public class UserController : Controller
+    public class UserController : ControllerBase
+
     {
-        public IActionResult Index()
+        private IbayContext _userContext;
+        public UserController(IbayContext context)
         {
-            return View();
+            _userContext = context;
+        }
+        [HttpGet]
+        public List<User> Get()
+        {
+            return _userContext.Users.ToList();
         }
     }
 }

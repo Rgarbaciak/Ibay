@@ -12,7 +12,6 @@ namespace ClassIbay
     {
         public int Id { get; set; }
         public float Amount { get; set; }
-        public int CartId { get; set; }
         public virtual Cart Cart { get; set; }
     }
 }

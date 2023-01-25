@@ -16,11 +16,6 @@ namespace ClassIbay
         public virtual User User { get; set; }
         public virtual ICollection<Product> Products { get; set; }
 
-        public Cart()
-        {
-            this.Products = new List<Product>();
-        }
+        public Cart() => this.Products = new List<Product>();
     }
-
-
 }

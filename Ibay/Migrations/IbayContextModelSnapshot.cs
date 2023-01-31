@@ -22,7 +22,7 @@ namespace Ibay.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ClassIbai.Cart", b =>
+            modelBuilder.Entity("ClassIbay.Cart", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,7 +40,7 @@ namespace Ibay.Migrations
                     b.ToTable("Cart");
                 });
 
-            modelBuilder.Entity("ClassIbai.Payment", b =>
+            modelBuilder.Entity("ClassIbay.Payment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,7 +61,7 @@ namespace Ibay.Migrations
                     b.ToTable("Payment");
                 });
 
-            modelBuilder.Entity("ClassIbai.Product", b =>
+            modelBuilder.Entity("ClassIbay.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -79,11 +79,9 @@ namespace Ibay.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Price")
@@ -96,7 +94,7 @@ namespace Ibay.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("ClassIbai.User", b =>
+            modelBuilder.Entity("ClassIbay.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,9 +123,9 @@ namespace Ibay.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("ClassIbai.Cart", b =>
+            modelBuilder.Entity("ClassIbay.Cart", b =>
                 {
-                    b.HasOne("ClassIbai.User", "User")
+                    b.HasOne("ClassIbay.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -136,9 +134,9 @@ namespace Ibay.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ClassIbai.Payment", b =>
+            modelBuilder.Entity("ClassIbay.Payment", b =>
                 {
-                    b.HasOne("ClassIbai.Cart", "Cart")
+                    b.HasOne("ClassIbay.Cart", "Cart")
                         .WithMany()
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -147,14 +145,14 @@ namespace Ibay.Migrations
                     b.Navigation("Cart");
                 });
 
-            modelBuilder.Entity("ClassIbai.Product", b =>
+            modelBuilder.Entity("ClassIbay.Product", b =>
                 {
-                    b.HasOne("ClassIbai.Cart", null)
+                    b.HasOne("ClassIbay.Cart", null)
                         .WithMany("Products")
                         .HasForeignKey("CartId");
                 });
 
-            modelBuilder.Entity("ClassIbai.Cart", b =>
+            modelBuilder.Entity("ClassIbay.Cart", b =>
                 {
                     b.Navigation("Products");
                 });

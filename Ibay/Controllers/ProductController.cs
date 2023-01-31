@@ -14,6 +14,7 @@ namespace Ibay.Controllers
 
         // GET: product
         [HttpGet]
+        [Route("/product")]
         public ActionResult<List<Product>> GetAllProducts()
         {
             return Ok(_productContext.Products);
@@ -21,7 +22,7 @@ namespace Ibay.Controllers
 
         // GET: product/id
         [HttpGet]
-        [Route("/id")]
+        [Route("/product/id")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _productContext.Products.FindAsync(id);
@@ -34,6 +35,7 @@ namespace Ibay.Controllers
 
         // POST: product
         [HttpPost]
+        [Route("/product/insert")]
         public ActionResult CreateProduct(Product product)
         {
             _productContext.Products.Add(product);
@@ -43,7 +45,8 @@ namespace Ibay.Controllers
 
         // PUT: product
         [HttpPut]
-        public ActionResult UpdateProduct(int id, Product product)
+        [Route("/product/update/")]
+        public ActionResult UpdateProduct([FromQuery] int id, [FromBody] Product product)
         {
             if (id != product.Id)
                 return BadRequest();
@@ -64,6 +67,7 @@ namespace Ibay.Controllers
 
         // DELETE: product
         [HttpDelete]
+        [Route("/product/delete/id")]
         public ActionResult DeleteProduct(int id)
         {
             var productExist = _productContext.Products.Where(p => p.Id == id).FirstOrDefault();

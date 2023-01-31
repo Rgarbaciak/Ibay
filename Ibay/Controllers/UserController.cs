@@ -15,9 +15,13 @@ namespace Ibay.Controllers
         {
             _userContext = context;
         }
-
-        // GET: user
+      
+      /// <summary>
+      /// test
+      /// </summary>
+      /// <returns></returns>
         [HttpGet]
+        [Route("/user")]
         public ActionResult<List<User>> GetAllUsers()
         {
             return Ok(_userContext.Users);
@@ -25,7 +29,7 @@ namespace Ibay.Controllers
 
         // GET: user/id
         [HttpGet]
-        [Route("/id")]
+        [Route("/user/id")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _userContext.Users.FindAsync(id);
@@ -38,6 +42,7 @@ namespace Ibay.Controllers
 
         // POST: user
         [HttpPost]
+        [Route("/user/insert")]
         public ActionResult CreateUser(User user)
         {
             _userContext.Users.Add(user);
@@ -47,8 +52,10 @@ namespace Ibay.Controllers
 
         // PUT: user
         [HttpPut]
-        public ActionResult UpdateUser(int id, User user)
+        [Route("/user/update")]
+        public ActionResult UpdateUser([FromQuery]int id, [FromBody]User user)
         {
+
             if(id != user.Id)
                 return BadRequest();
             var userExist = _userContext.Users.Where(u => u.Id == id).FirstOrDefault();
@@ -67,7 +74,8 @@ namespace Ibay.Controllers
         }
 
         // DELETE: user
-        [HttpDelete] 
+        [HttpDelete]
+        [Route("/user/delete/id")]
         public ActionResult DeleteUser(int id) 
         { 
             var userExist = _userContext.Users.Where(u => u.Id == id).FirstOrDefault();

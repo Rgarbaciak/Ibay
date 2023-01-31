@@ -15,6 +15,7 @@ namespace Ibay.Controllers
 
         // GET: payment
         [HttpGet]
+        [Route("/payment")]
         public ActionResult<List<Payment>> GetAllPayments()
         {
             return Ok(_paymentContext.Payments
@@ -24,7 +25,7 @@ namespace Ibay.Controllers
 
         // GET: payment/id
         [HttpGet]
-        [Route("/id")]
+        [Route("/payment/id")]
         public ActionResult<Payment> GetPayment(int id)
         {
             var payment = _paymentContext.Payments
@@ -39,6 +40,7 @@ namespace Ibay.Controllers
 
         // POST: payment
         [HttpPost]
+        [Route("/payment/insert/")]
         public ActionResult CreatePayment(Payment payment)
         {
             _paymentContext.Payments.Add(payment);
@@ -48,7 +50,8 @@ namespace Ibay.Controllers
 
         // PUT: payment
         [HttpPut]
-        public ActionResult UpdatePayment(int id, Payment payment)
+        [Route("/payment/update/")]
+        public ActionResult UpdatePayment([FromQuery]int id, [FromBody] Payment payment)
         {
             if (id != payment.Id)
                 return BadRequest();
@@ -69,6 +72,7 @@ namespace Ibay.Controllers
 
         // DELETE: payment
         [HttpDelete]
+        [Route("/payment/delete/")]
         public ActionResult DeletePayment(int id)
         {
             var paymentExist = _paymentContext.Payments.Where(p => p.Id == id).FirstOrDefault();

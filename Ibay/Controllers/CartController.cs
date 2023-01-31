@@ -27,7 +27,7 @@ namespace Ibay.Controllers
         // GET: cart/id
         [HttpGet]
         [Route("/cart/id")]
-        public ActionResult<Cart> GetCart(int id)
+        public ActionResult<Cart> GetCart([FromQuery] int id)
         {
             var cart = _cartContext.Carts
                 .Include(c => c.User)
@@ -43,7 +43,7 @@ namespace Ibay.Controllers
         // POST: cart
         [HttpPost]
         [Route("/cart/insert/")]
-        public ActionResult CreateCart(Cart cart)
+        public ActionResult CreateCart([FromBody] Cart cart)
         {
             _cartContext.Carts.Add(cart);
             _cartContext.SaveChanges();
@@ -75,7 +75,7 @@ namespace Ibay.Controllers
         // DELETE: cart
         [HttpDelete]
         [Route("/cart/delete/")]
-        public ActionResult DeleteCart(int id)
+        public ActionResult DeleteCart([FromQuery] int id)
         {
             var cartExist = _cartContext.Carts.Where(c => c.Id == id).FirstOrDefault();
             if (cartExist is null) return NotFound();

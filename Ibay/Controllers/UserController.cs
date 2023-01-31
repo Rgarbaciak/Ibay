@@ -15,11 +15,11 @@ namespace Ibay.Controllers
         {
             _userContext = context;
         }
-      
-      /// <summary>
-      /// test
-      /// </summary>
-      /// <returns></returns>
+
+          /// <summary>
+          /// Get all users
+          /// </summary>
+          /// <returns></returns>
         [HttpGet]
         [Route("/user")]
         public ActionResult<List<User>> GetAllUsers()
@@ -30,7 +30,7 @@ namespace Ibay.Controllers
         // GET: user/id
         [HttpGet]
         [Route("/user/id")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser([FromQuery] int id)
         {
             var user = await _userContext.Users.FindAsync(id);
             if (user == null)
@@ -43,7 +43,7 @@ namespace Ibay.Controllers
         // POST: user
         [HttpPost]
         [Route("/user/insert")]
-        public ActionResult CreateUser(User user)
+        public ActionResult CreateUser([FromBody] User user)
         {
             _userContext.Users.Add(user);
             _userContext.SaveChanges();
@@ -76,7 +76,7 @@ namespace Ibay.Controllers
         // DELETE: user
         [HttpDelete]
         [Route("/user/delete/id")]
-        public ActionResult DeleteUser(int id) 
+        public ActionResult DeleteUser([FromQuery] int id) 
         { 
             var userExist = _userContext.Users.Where(u => u.Id == id).FirstOrDefault();
             if(userExist is null) return NotFound();

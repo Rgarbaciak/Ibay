@@ -12,6 +12,9 @@ namespace Ibay.Controllers
             _productContext = context;
         }
 
+        /// <summary>
+        /// Récupère la liste de tous les produits
+        /// </summary>
         // GET: product
         [HttpGet]
         [Route("/product")]
@@ -19,11 +22,13 @@ namespace Ibay.Controllers
         {
             return Ok(_productContext.Products);
         }
-
+        /// <summary>
+        /// Récupère un produit via son ID
+        /// </summary>
         // GET: product/id
         [HttpGet]
         [Route("/product/id")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<Product>> GetProduct([FromQuery] int id)
         {
             var product = await _productContext.Products.FindAsync(id);
             if (product == null)
@@ -32,12 +37,16 @@ namespace Ibay.Controllers
             }
             return Ok(product);
         }
-
+        /// <summary>
+        /// Ajouter un produit
+        /// </summary>
+        
+        /// <returns>Produit ajouté</returns>
         // POST: product
         [HttpPost]
         [Route("/product/insert")]
-        public ActionResult CreateProduct(Product product)
-        {
+        public ActionResult CreateProduct([FromBody] Product product)
+        {   product.AddedTime=DateTime.Now;
             _productContext.Products.Add(product);
             _productContext.SaveChanges();
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
@@ -68,7 +77,7 @@ namespace Ibay.Controllers
         // DELETE: product
         [HttpDelete]
         [Route("/product/delete/id")]
-        public ActionResult DeleteProduct(int id)
+        public ActionResult DeleteProduct([FromQuery] int id)
         {
             var productExist = _productContext.Products.Where(p => p.Id == id).FirstOrDefault();
             if (productExist is null) return NotFound();

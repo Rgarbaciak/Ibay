@@ -15,22 +15,23 @@ namespace Ibay.Controllers
         {
             _userContext = context;
         }
-      
-      /// <summary>
-      /// test
-      /// </summary>
-      /// <returns></returns>
+
+        /// <summary>
+        /// Récupère la liste de tous les utilisateurs
+        /// </summary>
         [HttpGet]
         [Route("/user")]
         public ActionResult<List<User>> GetAllUsers()
         {
             return Ok(_userContext.Users);
         }
-
+        /// <summary>
+        /// Récupère un utilisateur via son ID
+        /// </summary>
         // GET: user/id
         [HttpGet]
         [Route("/user/id")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser([FromQuery] int id)
         {
             var user = await _userContext.Users.FindAsync(id);
             if (user == null)
@@ -39,17 +40,21 @@ namespace Ibay.Controllers
             }
             return Ok(user);
         }
-
+        /// <summary>
+        /// Ajoute un utilisateur 
+        /// </summary>
         // POST: user
         [HttpPost]
         [Route("/user/insert")]
-        public ActionResult CreateUser(User user)
+        public ActionResult CreateUser([FromBody] User user)
         {
             _userContext.Users.Add(user);
             _userContext.SaveChanges();
             return CreatedAtAction(nameof(GetUser), new { id = user.Id}, user);
         }
-
+        /// <summary>
+        /// Update un Utilisateur
+        /// </summary>
         // PUT: user
         [HttpPut]
         [Route("/user/update")]
@@ -72,11 +77,13 @@ namespace Ibay.Controllers
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// Supprime un utilisateur
+        /// </summary>
         // DELETE: user
         [HttpDelete]
         [Route("/user/delete/id")]
-        public ActionResult DeleteUser(int id) 
+        public ActionResult DeleteUser([FromQuery] int id) 
         { 
             var userExist = _userContext.Users.Where(u => u.Id == id).FirstOrDefault();
             if(userExist is null) return NotFound();

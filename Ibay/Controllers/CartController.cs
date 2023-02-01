@@ -2,6 +2,7 @@
 using IbayApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace Ibay.Controllers
 {
@@ -27,7 +28,7 @@ namespace Ibay.Controllers
         // GET: cart/id
         [HttpGet]
         [Route("/cart/id")]
-        public ActionResult<Cart> GetCart(int id)
+        public ActionResult<Cart> GetCart([FromQuery] int id)
         {
             var cart = _cartContext.Carts
                 .Include(c => c.User)
@@ -43,8 +44,17 @@ namespace Ibay.Controllers
         // POST: cart
         [HttpPost]
         [Route("/cart/insert/")]
-        public ActionResult CreateCart(Cart cart)
+
+        public ActionResult CreateCart([FromBody] Cart cart, [FromQuery] int userId, [FromQuery] List<int> productIds)
         {
+            var user = _cartContext.Users.Find(userId);
+            if (user is null) return BadRequest("User not found");
+            cart.User = user;
+
+            var products = _cartContext.Products.Where(p => productIds.Contains(p.Id)).ToList();
+            if (!products.Any()) return BadRequest("Products not found");
+            cart.Products = products;
+
             _cartContext.Carts.Add(cart);
             _cartContext.SaveChanges();
             return CreatedAtAction(nameof(GetCart), new { id = cart.Id }, cart);
@@ -75,7 +85,7 @@ namespace Ibay.Controllers
         // DELETE: cart
         [HttpDelete]
         [Route("/cart/delete/")]
-        public ActionResult DeleteCart(int id)
+        public ActionResult DeleteCart([FromQuery] int id)
         {
             var cartExist = _cartContext.Carts.Where(c => c.Id == id).FirstOrDefault();
             if (cartExist is null) return NotFound();

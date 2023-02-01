@@ -11,6 +11,10 @@ namespace Ibay.Controllers
         {
             _productContext = context;
         }
+
+        /// <summary>
+        /// Récupère la liste de tous les produits
+        /// </summary>
         // GET: product
         [HttpGet]
         [Route("/product")]
@@ -18,7 +22,9 @@ namespace Ibay.Controllers
         {
             return Ok(_productContext.Products);
         }
-
+        /// <summary>
+        /// Récupère un produit via son ID
+        /// </summary>
         // GET: product/id
         [HttpGet]
         [Route("/product/id")]
@@ -34,7 +40,7 @@ namespace Ibay.Controllers
         /// <summary>
         /// Ajouter un produit
         /// </summary>
-        /// <param name="product">Objet produit</param>
+        
         /// <returns>Produit ajouté</returns>
         // POST: product
         [HttpPost]

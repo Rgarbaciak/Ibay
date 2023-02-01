@@ -16,17 +16,18 @@ namespace Ibay.Controllers
             _userContext = context;
         }
 
-          /// <summary>
-          /// Get all users
-          /// </summary>
-          /// <returns></returns>
+        /// <summary>
+        /// Récupère la liste de tous les utilisateurs
+        /// </summary>
         [HttpGet]
         [Route("/user")]
         public ActionResult<List<User>> GetAllUsers()
         {
             return Ok(_userContext.Users);
         }
-
+        /// <summary>
+        /// Récupère un utilisateur via son ID
+        /// </summary>
         // GET: user/id
         [HttpGet]
         [Route("/user/id")]
@@ -39,7 +40,9 @@ namespace Ibay.Controllers
             }
             return Ok(user);
         }
-
+        /// <summary>
+        /// Ajoute un utilisateur 
+        /// </summary>
         // POST: user
         [HttpPost]
         [Route("/user/insert")]
@@ -49,7 +52,9 @@ namespace Ibay.Controllers
             _userContext.SaveChanges();
             return CreatedAtAction(nameof(GetUser), new { id = user.Id}, user);
         }
-
+        /// <summary>
+        /// Update un Utilisateur
+        /// </summary>
         // PUT: user
         [HttpPut]
         [Route("/user/update")]
@@ -72,7 +77,9 @@ namespace Ibay.Controllers
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// Supprime un utilisateur
+        /// </summary>
         // DELETE: user
         [HttpDelete]
         [Route("/user/delete/id")]

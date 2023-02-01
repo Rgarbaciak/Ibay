@@ -2,6 +2,7 @@
 using IbayApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace Ibay.Controllers
 {
@@ -43,8 +44,17 @@ namespace Ibay.Controllers
         // POST: cart
         [HttpPost]
         [Route("/cart/insert/")]
-        public ActionResult CreateCart([FromBody] Cart cart)
+
+        public ActionResult CreateCart([FromBody] Cart cart, [FromQuery] int userId, [FromQuery] List<int> productIds)
         {
+            var user = _cartContext.Users.Find(userId);
+            if (user is null) return BadRequest("User not found");
+            cart.User = user;
+
+            var products = _cartContext.Products.Where(p => productIds.Contains(p.Id)).ToList();
+            if (!products.Any()) return BadRequest("Products not found");
+            cart.Products = products;
+
             _cartContext.Carts.Add(cart);
             _cartContext.SaveChanges();
             return CreatedAtAction(nameof(GetCart), new { id = cart.Id }, cart);

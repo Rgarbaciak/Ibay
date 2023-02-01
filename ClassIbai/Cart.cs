@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+using NSwag.Annotations;    
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
+
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+
 
 namespace ClassIbay
 {
@@ -14,7 +13,10 @@ namespace ClassIbay
     {
         [JsonIgnore]
         public int Id { get; set; }
+        [JsonIgnore]
         public virtual User User { get; set; }
+        [JsonIgnore]
+
         public virtual ICollection<Product> Products { get; set; }
 
         public Cart() => this.Products = new List<Product>();

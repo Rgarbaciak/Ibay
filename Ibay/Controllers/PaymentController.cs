@@ -1,4 +1,4 @@
-﻿using ClassIbay;
+using ClassIbay;
 using IbayApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -56,10 +56,12 @@ namespace Ibay.Controllers
 
             return Ok(payment);
 
+
         }
         /// <summary>
         /// Ajoute un payment
         /// </summary>
+
         // POST: payment
         [HttpPost]
         [Route("/payment/insert/")]

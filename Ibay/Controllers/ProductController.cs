@@ -13,7 +13,7 @@ namespace Ibay.Controllers
         }
 
         /// <summary>
-        /// Récupère la liste de tous les produits
+        /// Récupère la liste de tous les produits et permet de les trier par date, type, nom et prix (la limite par défaut est de 10, mais peut être modifiée avec un paramètre)
         /// </summary>
         // GET: product
         [HttpGet]

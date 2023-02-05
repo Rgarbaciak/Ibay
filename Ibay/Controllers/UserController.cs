@@ -23,7 +23,12 @@ namespace Ibay.Controllers
         [Route("/user")]
         public ActionResult<List<User>> GetAllUsers()
         {
-            return Ok(_userContext.Users);
+            var users = _userContext.Users;
+            if (users.Count() == 0)
+            {
+                return NotFound("No users found in the database.");
+            }
+            return Ok(users);
         }
         /// <summary>
         /// Récupère un utilisateur en fonction de l'ID
@@ -36,7 +41,7 @@ namespace Ibay.Controllers
             var user = await _userContext.Users.FindAsync(id);
             if (user == null)
             {
-                return NotFound();
+                return NotFound("User with id " + id + " not found");
             }
             return Ok(user);
         }
@@ -48,9 +53,16 @@ namespace Ibay.Controllers
         [Route("/user/insert")]
         public ActionResult CreateUser([FromBody] User user)
         {
-            _userContext.Users.Add(user);
-            _userContext.SaveChanges();
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id}, user);
+            try
+            {
+                _userContext.Users.Add(user);
+                _userContext.SaveChanges();
+                return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            }
+            catch
+            {
+                return BadRequest("Failed to create user");
+            }
         }
         /// <summary>
         /// Update un Utilisateur en fonction de l'ID
@@ -62,9 +74,11 @@ namespace Ibay.Controllers
         {
 
             if(id != user.Id)
-                return BadRequest();
+            {
+                return BadRequest("ID in request and user object are different");
+            }
             var userExist = _userContext.Users.Where(u => u.Id == id).FirstOrDefault();
-            if (userExist is null) return NotFound(id);
+            if (userExist is null) return NotFound("User with id " + id + " not found");
 
             try
             {
@@ -74,7 +88,7 @@ namespace Ibay.Controllers
             }
             catch 
             {
-                return BadRequest();
+                return BadRequest("Failed to update user");
             }
         }
         /// <summary>
@@ -86,7 +100,7 @@ namespace Ibay.Controllers
         public ActionResult DeleteUser([FromQuery] int id) 
         { 
             var userExist = _userContext.Users.Where(u => u.Id == id).FirstOrDefault();
-            if(userExist is null) return NotFound();
+            if (userExist is null) return NotFound("User with id " + id + " not found");
 
             try
             {
@@ -95,7 +109,7 @@ namespace Ibay.Controllers
             }
             catch 
             {
-                return BadRequest();
+                return BadRequest("Failed to delete user");
             }
         }
     } 

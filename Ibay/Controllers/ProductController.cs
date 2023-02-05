@@ -20,10 +20,12 @@ namespace Ibay.Controllers
         [Route("/product")]
         public ActionResult<List<Product>> GetAllProducts()
         {
-            return Ok(_productContext.Products);
+            return Ok(_productContext.Products
+                .Select(p => new { p.Id, p.Name, p.Image,p.Available,p.AddedTime })
+                .OrderBy(p => p.Id));
         }
         /// <summary>
-        /// Récupère un produit via son ID
+        /// Récupère un produit en fonction de l'ID
         /// </summary>
         // GET: product/id
         [HttpGet]
@@ -38,7 +40,7 @@ namespace Ibay.Controllers
             return Ok(product);
         }
         /// <summary>
-        /// Ajouter un produit
+        /// Ajoute un produit
         /// </summary>
         
         /// <returns>Produit ajouté</returns>
@@ -51,7 +53,9 @@ namespace Ibay.Controllers
             _productContext.SaveChanges();
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
-
+        /// <summary>
+        /// Update un produit en fonction de l'ID
+        /// </summary>
         // PUT: product
         [HttpPut]
         [Route("/product/update/")]
@@ -73,7 +77,9 @@ namespace Ibay.Controllers
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// Supprime un produit en fonction de l'ID
+        /// </summary>
         // DELETE: product
         [HttpDelete]
         [Route("/product/delete/id")]

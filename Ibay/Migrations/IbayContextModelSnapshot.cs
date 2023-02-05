@@ -40,6 +40,32 @@ namespace Ibay.Migrations
                     b.ToTable("Cart");
                 });
 
+            modelBuilder.Entity("ClassIbay.CartProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartProduct");
+                });
+
             modelBuilder.Entity("ClassIbay.Payment", b =>
                 {
                     b.Property<int>("Id")
@@ -75,9 +101,6 @@ namespace Ibay.Migrations
                     b.Property<bool>("Available")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("CartId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
@@ -88,8 +111,6 @@ namespace Ibay.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CartId");
 
                     b.ToTable("Product");
                 });
@@ -134,6 +155,21 @@ namespace Ibay.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ClassIbay.CartProduct", b =>
+                {
+                    b.HasOne("ClassIbay.Cart", null)
+                        .WithMany("CartProducts")
+                        .HasForeignKey("CartId");
+
+                    b.HasOne("ClassIbay.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ClassIbay.Payment", b =>
                 {
                     b.HasOne("ClassIbay.Cart", "Cart")
@@ -145,16 +181,9 @@ namespace Ibay.Migrations
                     b.Navigation("Cart");
                 });
 
-            modelBuilder.Entity("ClassIbay.Product", b =>
-                {
-                    b.HasOne("ClassIbay.Cart", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CartId");
-                });
-
             modelBuilder.Entity("ClassIbay.Cart", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("CartProducts");
                 });
 #pragma warning restore 612, 618
         }

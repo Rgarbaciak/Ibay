@@ -26,7 +26,7 @@ namespace Ibay.Controllers
             return Ok(_userContext.Users);
         }
         /// <summary>
-        /// Récupère un utilisateur via son ID
+        /// Récupère un utilisateur en fonction de l'ID
         /// </summary>
         // GET: user/id
         [HttpGet]
@@ -53,7 +53,7 @@ namespace Ibay.Controllers
             return CreatedAtAction(nameof(GetUser), new { id = user.Id}, user);
         }
         /// <summary>
-        /// Update un Utilisateur
+        /// Update un Utilisateur en fonction de l'ID
         /// </summary>
         // PUT: user
         [HttpPut]
@@ -78,7 +78,7 @@ namespace Ibay.Controllers
             }
         }
         /// <summary>
-        /// Supprime un utilisateur
+        /// Supprime un utilisateur en fonction de l'ID
         /// </summary>
         // DELETE: user
         [HttpDelete]

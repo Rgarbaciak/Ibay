@@ -11,7 +11,6 @@ namespace IbayApi.Services
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Payment> Payments { get; set; }
-
         public IbayContext(DbContextOptions<IbayContext> options) : base(options)
         { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

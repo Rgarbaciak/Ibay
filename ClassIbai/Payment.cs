@@ -14,6 +14,7 @@ namespace ClassIbay
         [JsonIgnore]
         public int Id { get; set; }
         public float Amount { get; set; }
+        [JsonIgnore]
         public virtual Cart Cart { get; set; }
     }
 }

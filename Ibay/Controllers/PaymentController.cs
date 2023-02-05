@@ -2,6 +2,7 @@
 using IbayApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Web.Helpers;
 
 namespace Ibay.Controllers
 {
@@ -12,17 +13,28 @@ namespace Ibay.Controllers
         {
             _paymentContext = context;
         }
-
+        /// <summary>
+        /// Récupère la liste de tous les payments 
+        /// </summary>
         // GET: payment
         [HttpGet]
         [Route("/payment")]
         public ActionResult<List<Payment>> GetAllPayments()
         {
-            return Ok(_paymentContext.Payments
+            var payments = _paymentContext.Payments
                 .Include(p => p.Cart)
-                .OrderBy(p => p.Id));
-        }
+                .ThenInclude(u => u.User)
+                .Include(p => p.Cart)
+                .ThenInclude(c => c.CartProducts)
+                .ThenInclude(cp => cp.Product)
+                .Select(p => new { p.Id, p.Amount, p.Cart })
+                .OrderBy(p => p.Id);
+            return Ok(payments);
 
+        }
+        /// <summary>
+        /// Récupère un payment en fonction de l'id 
+        /// </summary>
         // GET: payment/id
         [HttpGet]
         [Route("/payment/id")]
@@ -30,33 +42,49 @@ namespace Ibay.Controllers
         {
             var payment = _paymentContext.Payments
                 .Include(p => p.Cart)
-                .FirstOrDefault();
-            if (payment is null)
+                .ThenInclude(u => u.User)
+                .Include(p => p.Cart)
+                .ThenInclude(c => c.CartProducts)
+                .ThenInclude(cp => cp.Product)
+                .Select(p => new { p.Id, p.Amount, p.Cart })
+                .FirstOrDefault(p => p.Id == id);
+
+            if (payment == null)
             {
                 return NotFound();
             }
-            return Ok(payment);
-        }
 
+            return Ok(payment);
+
+        }
+        /// <summary>
+        /// Ajoute un payment
+        /// </summary>
         // POST: payment
         [HttpPost]
         [Route("/payment/insert/")]
-        public ActionResult CreatePayment([FromBody] Payment payment)
+        public ActionResult CreatePayment([FromBody] Payment payment, [FromQuery] int cartId)
         {
+            var cart = _paymentContext.Carts.Find(cartId);
+            if (cart is null) return BadRequest("Cart not found");
+            payment.Cart = cart;
             _paymentContext.Payments.Add(payment);
             _paymentContext.SaveChanges();
             return CreatedAtAction(nameof(GetPayment), new { id = payment.Id }, payment);
         }
-
+        /// <summary>
+        /// Update un payment en fonction de l'id 
+        /// </summary>
         // PUT: payment
         [HttpPut]
         [Route("/payment/update/")]
         public ActionResult UpdatePayment([FromQuery]int id, [FromBody] Payment payment)
         {
             if (id != payment.Id)
-                return BadRequest();
+            return BadRequest();
             var paymentExist = _paymentContext.Payments.Where(p => p.Id == id).FirstOrDefault();
-            if (paymentExist is null) return NotFound(id);
+            if (paymentExist is null)
+            return NotFound(id);
 
             try
             {
@@ -69,7 +97,9 @@ namespace Ibay.Controllers
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// Supprime un payment en fonction de l'id 
+        /// </summary>
         // DELETE: payment
         [HttpDelete]
         [Route("/payment/delete/")]

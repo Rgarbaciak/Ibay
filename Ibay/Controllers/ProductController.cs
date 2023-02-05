@@ -18,11 +18,26 @@ namespace Ibay.Controllers
         // GET: product
         [HttpGet]
         [Route("/product")]
-        public ActionResult<List<Product>> GetAllProducts()
+        public ActionResult<List<Product>> GetAllProducts([FromQuery] int limit = 10, [FromQuery] string sortBy = "addedTime")
         {
-            return Ok(_productContext.Products
-                .Select(p => new { p.Id, p.Name, p.Image,p.Available,p.AddedTime })
-                .OrderBy(p => p.Id));
+            var products = _productContext.Products
+                .Select(p => new { p.Id, p.Name, p.Image, p.Available, p.AddedTime,p.Price });
+            switch (sortBy.ToLower())
+            {
+                case "addedtime":
+                    products = products.OrderBy(p => p.AddedTime);
+                    break;
+                case "name":
+                    products = products.OrderBy(p => p.Name);
+                    break;
+                case "price":
+                    products = products.OrderBy(p => p.Price);
+                    break;
+                default:
+                    products = products.OrderBy(p => p.AddedTime);
+                    break;
+            }
+            return Ok(products.Take(limit).ToList());
         }
         /// <summary>
         /// Récupère un produit en fonction de l'ID
@@ -40,9 +55,25 @@ namespace Ibay.Controllers
             return Ok(product);
         }
         /// <summary>
+        /// Récupère un produit en fonction de la recherche
+        /// </summary>
+
+        [HttpGet]
+        [Route("/product/search")]
+        public ActionResult<List<Product>> SearchProducts([FromQuery] string searchTerm)
+        {
+            return Ok(_productContext.Products
+                .Where(p => p.Name.Contains(searchTerm) ||
+                            p.Image.Contains(searchTerm) ||
+                            p.Available.ToString().Contains(searchTerm) ||
+                            p.AddedTime.ToString().Contains(searchTerm))
+                .Select(p => new { p.Id, p.Name, p.Image, p.Available, p.AddedTime })
+                .OrderBy(p => p.Id));
+        }
+        /// <summary>
         /// Ajoute un produit
         /// </summary>
-        
+
         /// <returns>Produit ajouté</returns>
         // POST: product
         [HttpPost]

@@ -14,19 +14,9 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "ToDo API",
-        Description = "An ASP.NET Core Web API for managing ToDo items",
-        TermsOfService = new Uri("https://example.com/terms"),
-        Contact = new OpenApiContact
-        {
-            Name = "Example Contact",
-            Url = new Uri("https://example.com/contact")
-        },
-        License = new OpenApiLicense
-        {
-            Name = "Example License",
-            Url = new Uri("https://example.com/license")
-        }
+        Title = "Ibay API",
+        Description = "iBay Ltd est une entreprise qui vise à produire la meilleure expérience pour votre magasin en ligne. Cette API développée en C# / .net Core vous permet d'accéder à des informations sur les produits et à d'autres données pertinentes, ainsi que de devenir vendeur et de proposer vos propres produits. Toutes les données sont stockées dans une base de données SQL Server à l'aide de Entity Framework Core et sont conformes aux normes REST (méthodes, endpoint, etc.). En plus de cela, une application de console .net simple est fournie pour interroger l'API.",
+            
     });
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));

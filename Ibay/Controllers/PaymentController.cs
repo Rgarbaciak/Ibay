@@ -38,6 +38,7 @@ namespace Ibay.Controllers
             return Ok(payment);
         }
 
+
         // POST: payment
         [HttpPost]
         [Route("/payment/insert/")]

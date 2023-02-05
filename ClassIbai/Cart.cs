@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 using System.Text.Json.Serialization;
 
@@ -13,10 +14,16 @@ namespace ClassIbay
         public int Id { get; set; }
         [JsonIgnore]
         public virtual User User { get; set; }
+        public virtual ICollection<CartProduct> CartProducts { get; set; }
+
+        public Cart() => this.CartProducts = new List<CartProduct>();
+    }
+
+    public class CartProduct
+    {
         [JsonIgnore]
-
-        public virtual ICollection<Product> Products { get; set; }
-
-        public Cart() => this.Products = new List<Product>();
+        public int Id { get; set; }
+        public virtual Product Product { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -13,17 +13,34 @@ namespace Ibay.Controllers
         }
 
         /// <summary>
-        /// Récupère la liste de tous les produits
+        /// Récupère la liste de tous les produits et permet de les trier par date, type, nom et prix (la limite par défaut est de 10, mais peut être modifiée avec un paramètre)
         /// </summary>
         // GET: product
         [HttpGet]
         [Route("/product")]
-        public ActionResult<List<Product>> GetAllProducts()
+        public ActionResult<List<Product>> GetAllProducts([FromQuery] int limit = 10, [FromQuery] string sortBy = "addedTime")
         {
-            return Ok(_productContext.Products);
+            var products = _productContext.Products
+                .Select(p => new { p.Id, p.Name, p.Image, p.Available, p.AddedTime,p.Price });
+            switch (sortBy.ToLower())
+            {
+                case "addedtime":
+                    products = products.OrderBy(p => p.AddedTime);
+                    break;
+                case "name":
+                    products = products.OrderBy(p => p.Name);
+                    break;
+                case "price":
+                    products = products.OrderBy(p => p.Price);
+                    break;
+                default:
+                    products = products.OrderBy(p => p.AddedTime);
+                    break;
+            }
+            return Ok(products.Take(limit).ToList());
         }
         /// <summary>
-        /// Récupère un produit via son ID
+        /// Récupère un produit en fonction de l'ID
         /// </summary>
         // GET: product/id
         [HttpGet]
@@ -38,9 +55,25 @@ namespace Ibay.Controllers
             return Ok(product);
         }
         /// <summary>
-        /// Ajouter un produit
+        /// Récupère un produit en fonction de la recherche
         /// </summary>
-        
+
+        [HttpGet]
+        [Route("/product/search")]
+        public ActionResult<List<Product>> SearchProducts([FromQuery] string searchTerm)
+        {
+            return Ok(_productContext.Products
+                .Where(p => p.Name.Contains(searchTerm) ||
+                            p.Image.Contains(searchTerm) ||
+                            p.Available.ToString().Contains(searchTerm) ||
+                            p.AddedTime.ToString().Contains(searchTerm))
+                .Select(p => new { p.Id, p.Name, p.Image, p.Available, p.AddedTime })
+                .OrderBy(p => p.Id));
+        }
+        /// <summary>
+        /// Ajoute un produit
+        /// </summary>
+
         /// <returns>Produit ajouté</returns>
         // POST: product
         [HttpPost]
@@ -51,7 +84,9 @@ namespace Ibay.Controllers
             _productContext.SaveChanges();
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
-
+        /// <summary>
+        /// Update un produit en fonction de l'ID
+        /// </summary>
         // PUT: product
         [HttpPut]
         [Route("/product/update/")]
@@ -73,7 +108,9 @@ namespace Ibay.Controllers
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// Supprime un produit en fonction de l'ID
+        /// </summary>
         // DELETE: product
         [HttpDelete]
         [Route("/product/delete/id")]

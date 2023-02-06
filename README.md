@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Ce projet a pour but de fournir une solution pour une application web qui utilise une base de données. Il utilise Entity Framework (EF) pour gérer les opérations de la base de données et ASP.NET Core pour la logique métier.
+Ce projet a pour but de fournir une API . Il utilise Entity Framework (EF) pour gérer les opérations de la base de données et ASP.NET Core pour la logique métier.
 
 
 ## Prérequis
@@ -19,7 +19,7 @@ Téléchargez ou clonez ce repository sur votre ordinateur.
 
 Ouvrez le projet dans Visual Studio ou Visual Studio Code.
 
-Dans Visual Studio, appuyez sur Ctrl + Shift + B pour compiler le projet. Dans Visual Studio Code, ouvrez la console de commande et entrez la commande dotnet build pour compiler le projet.
+Dans Visual Studio, appuyez sur Ctrl + Shift + B pour compiler le projet. Dans Visual Studio Code, ouvrez la console de commande et entrez la commande ```dotnet build``` pour compiler le projet.
 
 Une fois le projet compilé avec succès, ouvrez la console de commande dans le répertoire du projet et entrez la commande suivante pour créer la base de données :
 

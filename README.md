@@ -29,7 +29,7 @@ Une fois le projet compilé avec succès, ouvrez la console de commande dans le 
 
 Dans Visual Studio, appuyez sur F5 pour lancer l'application. Dans Visual Studio Code, ouvrez la console de commande et entrez la commande dotnet run pour lancer l'application.
 
-Ouvrez votre navigateur web et accédez à l'URL http://localhost:5000/ pour accéder à l'application.
+Ouvrez votre navigateur web et accédez à l'URL http://localhost:7001/ pour accéder à l'application.
 
 ## Commandes Entity Framework
 

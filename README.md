@@ -1,11 +1,11 @@
-Project Ibay
+# Project Ibay
 
-Introduction
+## Introduction
 
 Ce projet a pour but de fournir une solution pour une application web qui utilise une base de données. Il utilise Entity Framework (EF) pour gérer les opérations de la base de données et ASP.NET Core pour la logique métier.
 
 
-Prérequis
+## Prérequis
 
 Avant de commencer à travailler sur ce projet, vous devez avoir les outils suivants installés sur votre ordinateur :
 
@@ -13,7 +13,7 @@ Avant de commencer à travailler sur ce projet, vous devez avoir les outils suiv
 
 •Visual Studio 2019 ou Visual Studio Code
 
-Installation
+## Installation
 
 Téléchargez ou clonez ce repository sur votre ordinateur.
 
@@ -25,16 +25,15 @@ Une fois le projet compilé avec succès, ouvrez la console de commande dans le 
 
 dotnet ef database update
 
-Utilisation
+## Utilisation
 
 Dans Visual Studio, appuyez sur F5 pour lancer l'application. Dans Visual Studio Code, ouvrez la console de commande et entrez la commande dotnet run pour lancer l'application.
 
 Ouvrez votre navigateur web et accédez à l'URL http://localhost:5000/ pour accéder à l'application.
 
-Commandes Entity Framework
+## Commandes Entity Framework
 
 Les commandes Entity Framework suivantes sont utilisées pour gérer la base de données :
-
 
 dotnet ef database update : crée la base de données si elle n'existe pas et met à jour les tables en fonction des modifications apportées aux modèles.
 
@@ -44,7 +43,7 @@ dotnet ef migrations remove : supprime la dernière migration ajoutée.
 
 dotnet ef database drop : supprime la base de données.
 
-Conclusion
+## Conclusion
 
 Ce projet vous fournit une solution pour une application web qui utilise une base de données gérée avec Entity Framework. Vous pouvez utiliser les commandes Entity Framework pour gérer la base de données et les modèles, ainsi que les fonctionnalités d'ASP.NET Core pour implémenter la logique métier de l'application.
 

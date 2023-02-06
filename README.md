@@ -45,5 +45,6 @@ Les commandes Entity Framework suivantes sont utilisées pour gérer la base de 
 
 ## Conclusion
 
-Ce projet vous fournit une solution pour une application web qui utilise une base de données gérée avec Entity Framework. Vous pouvez utiliser les commandes Entity Framework pour gérer la base de données et les modèles, ainsi que les fonctionnalités d'ASP.NET Core pour implémenter la logique métier de l'application.
+Ce projet vous fournit une API qui utilise une base de données gérée avec Entity Framework. Vous pouvez utiliser les commandes Entity Framework pour gérer la base de données et les modèles, ainsi que les fonctionnalités d'ASP.NET Core pour implémenter la logique métier de l'application.
 
+Il faut utiliser Swagger pour pouvoir insérer des données.

@@ -1,6 +1,8 @@
 ﻿using ClassIbay;
 using IbayApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Ibay.Controllers
 {
@@ -91,6 +93,16 @@ namespace Ibay.Controllers
         [Route("/product/insert")]
         public ActionResult CreateProduct([FromBody] Product product)
         {
+            var jwtToken = Request.Cookies["jwtToken"];
+            if (jwtToken == null)
+            {
+                return Unauthorized();
+            }
+            var role =  Request.Cookies["role"];
+            if (role != "seller")
+            {
+                return Forbid();
+            }
             try
             {
                 product.AddedTime = DateTime.Now;
@@ -111,6 +123,16 @@ namespace Ibay.Controllers
         [Route("/product/update/")]
         public ActionResult UpdateProduct([FromQuery] int id, [FromBody] Product product)
         {
+            var jwtToken = Request.Cookies["jwtToken"];
+            if (jwtToken == null)
+            {
+                return Unauthorized();
+            }
+            var role = Request.Cookies["role"];
+            if (role != "seller")
+            {
+                return Forbid();
+            }
 
             if (id != product.Id)
             { 
@@ -138,6 +160,16 @@ namespace Ibay.Controllers
         [Route("/product/delete/id")]
         public ActionResult DeleteProduct([FromQuery] int id)
         {
+            var jwtToken = Request.Cookies["jwtToken"];
+            if (jwtToken == null)
+            {
+                return Unauthorized();
+            }
+            var role = Request.Cookies["role"];
+            if (role != "seller")
+            {
+                return Forbid();
+            }
             var productExist = _productContext.Products.Where(p => p.Id == id).FirstOrDefault();
             if (productExist is null) return NotFound("Product with id " + id + " not found");
 

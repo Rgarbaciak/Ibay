@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClassIbay;
 using IbayApi.Services;
+using Newtonsoft.Json.Linq;
 
 namespace Ibay.Controllers
 {
@@ -72,8 +73,14 @@ namespace Ibay.Controllers
         [Route("/user/update")]
         public ActionResult UpdateUser([FromQuery]int id, [FromBody]User user)
         {
+            var currentUserId = int.Parse(Request.Cookies["userId"]);
 
-            if(id != user.Id)
+            // Vérifier si l'utilisateur actuel est le même que celui qui est en train d'être mis à jour
+            if (currentUserId != id)
+            {
+                return BadRequest("You can only update yourself.");
+            }
+            if (id != user.Id)
             {
                 return BadRequest("ID in request and user object are different");
             }
@@ -97,8 +104,11 @@ namespace Ibay.Controllers
         // DELETE: user
         [HttpDelete]
         [Route("/user/delete/id")]
-        public ActionResult DeleteUser([FromQuery] int id) 
-        { 
+        public ActionResult DeleteUser([FromQuery] int id)
+        {
+            var userId = int.Parse(Request.Cookies["userId"]);
+            if (userId != id) return BadRequest("You can only delete yourself.");
+           
             var userExist = _userContext.Users.Where(u => u.Id == id).FirstOrDefault();
             if (userExist is null) return NotFound("User with id " + id + " not found");
 

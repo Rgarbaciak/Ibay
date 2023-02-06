@@ -1,6 +1,8 @@
 ﻿using ClassIbay;
 using IbayApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Ibay.Controllers
 {
@@ -37,6 +39,10 @@ namespace Ibay.Controllers
                     products = products.OrderBy(p => p.AddedTime);
                     break;
             }
+            if (products.Count() == 0)
+            {
+                return NotFound("No products found in the database.");
+            }
             return Ok(products.Take(limit).ToList());
         }
         /// <summary>
@@ -50,26 +56,33 @@ namespace Ibay.Controllers
             var product = await _productContext.Products.FindAsync(id);
             if (product == null)
             {
-                return NotFound();
+                return NotFound("Product with id " + id + " not found");
             }
             return Ok(product);
         }
         /// <summary>
         /// Récupère un produit en fonction de la recherche
         /// </summary>
-
         [HttpGet]
         [Route("/product/search")]
         public ActionResult<List<Product>> SearchProducts([FromQuery] string searchTerm)
         {
-            return Ok(_productContext.Products
-                .Where(p => p.Name.Contains(searchTerm) ||
-                            p.Image.Contains(searchTerm) ||
-                            p.Available.ToString().Contains(searchTerm) ||
-                            p.AddedTime.ToString().Contains(searchTerm))
-                .Select(p => new { p.Id, p.Name, p.Image, p.Available, p.AddedTime })
-                .OrderBy(p => p.Id));
+            try
+            {
+                return Ok(_productContext.Products
+                    .Where(p => p.Name.Contains(searchTerm) ||
+                                p.Image.Contains(searchTerm) ||
+                                p.Available.ToString().Contains(searchTerm) ||
+                                p.AddedTime.ToString().Contains(searchTerm))
+                    .Select(p => new { p.Id, p.Name, p.Image, p.Available, p.AddedTime })
+                    .OrderBy(p => p.Id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Failed to search a Product");
+            }
         }
+
         /// <summary>
         /// Ajoute un produit
         /// </summary>
@@ -79,9 +92,27 @@ namespace Ibay.Controllers
         [HttpPost]
         [Route("/product/insert")]
         public ActionResult CreateProduct([FromBody] Product product)
-        {   product.AddedTime=DateTime.Now;
-            _productContext.Products.Add(product);
-            _productContext.SaveChanges();
+        {
+            var jwtToken = Request.Cookies["jwtToken"];
+            if (jwtToken == null)
+            {
+                return Unauthorized();
+            }
+            var role =  Request.Cookies["role"];
+            if (role != "seller")
+            {
+                return Forbid();
+            }
+            try
+            {
+                product.AddedTime = DateTime.Now;
+                _productContext.Products.Add(product);
+                _productContext.SaveChanges();
+            }
+            catch
+            {
+                return BadRequest("Failed to create Product");
+            }
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
         /// <summary>
@@ -92,10 +123,23 @@ namespace Ibay.Controllers
         [Route("/product/update/")]
         public ActionResult UpdateProduct([FromQuery] int id, [FromBody] Product product)
         {
+            var jwtToken = Request.Cookies["jwtToken"];
+            if (jwtToken == null)
+            {
+                return Unauthorized();
+            }
+            var role = Request.Cookies["role"];
+            if (role != "seller")
+            {
+                return Forbid();
+            }
+
             if (id != product.Id)
-                return BadRequest();
+            { 
+                return BadRequest("ID in request and product object are different");
+            }
             var productExist = _productContext.Products.Where(p => p.Id == id).FirstOrDefault();
-            if (productExist is null) return NotFound(id);
+            if (productExist is null) return NotFound("Product with id " + id + " not found");
 
             try
             {
@@ -105,7 +149,7 @@ namespace Ibay.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Failed to update product");
             }
         }
         /// <summary>
@@ -116,8 +160,18 @@ namespace Ibay.Controllers
         [Route("/product/delete/id")]
         public ActionResult DeleteProduct([FromQuery] int id)
         {
+            var jwtToken = Request.Cookies["jwtToken"];
+            if (jwtToken == null)
+            {
+                return Unauthorized();
+            }
+            var role = Request.Cookies["role"];
+            if (role != "seller")
+            {
+                return Forbid();
+            }
             var productExist = _productContext.Products.Where(p => p.Id == id).FirstOrDefault();
-            if (productExist is null) return NotFound();
+            if (productExist is null) return NotFound("Product with id " + id + " not found");
 
             try
             {
@@ -126,7 +180,7 @@ namespace Ibay.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Failed to delete product");
             }
         }
     }

@@ -29,6 +29,11 @@ namespace Ibay.Controllers
                 .ThenInclude(cp => cp.Product)
                 .Select(p => new { p.Id, p.Amount, p.Cart })
                 .OrderBy(p => p.Id);
+
+            if (payments.Count() == 0)
+            {
+                return NotFound("No payments found in the database.");
+            }
             return Ok(payments);
 
         }
@@ -51,7 +56,7 @@ namespace Ibay.Controllers
 
             if (payment == null)
             {
-                return NotFound();
+                return NotFound("No payment found in the database.");
             }
 
             return Ok(payment);
@@ -69,9 +74,16 @@ namespace Ibay.Controllers
         {
             var cart = _paymentContext.Carts.Find(cartId);
             if (cart is null) return BadRequest("Cart not found");
-            payment.Cart = cart;
-            _paymentContext.Payments.Add(payment);
-            _paymentContext.SaveChanges();
+            try
+            {
+                payment.Cart = cart;
+                _paymentContext.Payments.Add(payment);
+                _paymentContext.SaveChanges();
+            }
+            catch
+            {
+                return BadRequest("Failed to create Payment");
+            }
             return CreatedAtAction(nameof(GetPayment), new { id = payment.Id }, payment);
         }
         /// <summary>
@@ -83,7 +95,9 @@ namespace Ibay.Controllers
         public ActionResult UpdatePayment([FromQuery]int id, [FromBody] Payment payment)
         {
             if (id != payment.Id)
-            return BadRequest();
+            {
+                return BadRequest("ID in request and payment object are different");
+            }
             var paymentExist = _paymentContext.Payments.Where(p => p.Id == id).FirstOrDefault();
             if (paymentExist is null)
             return NotFound(id);
@@ -96,7 +110,7 @@ namespace Ibay.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Failed to update payment");
             }
         }
         /// <summary>
@@ -108,7 +122,7 @@ namespace Ibay.Controllers
         public ActionResult DeletePayment([FromQuery] int id)
         {
             var paymentExist = _paymentContext.Payments.Where(p => p.Id == id).FirstOrDefault();
-            if (paymentExist is null) return NotFound();
+            if (paymentExist is null) return NotFound("Payment with id " + id + " not found");
 
             try
             {
@@ -117,7 +131,7 @@ namespace Ibay.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Failed to delete payment");
             }
         }
     }

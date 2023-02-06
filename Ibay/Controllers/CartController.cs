@@ -21,12 +21,18 @@ namespace Ibay.Controllers
         [Route("/cart")]
         public ActionResult<List<Cart>> GetAllCarts() 
         {
-            return Ok(_cartContext.Carts
+            var carts = _cartContext.Carts
                 .Include(c => c.User)
                 .Include(c => c.CartProducts)
                  .ThenInclude(cp => cp.Product)
                  .Select(cp => new { cp.Id, cp.CartProducts, cp.User })
-                .OrderBy(c => c.Id));
+                .OrderBy(c => c.Id);
+
+            if (carts.Count() == 0)
+            {
+                return NotFound("No carts found in the database.");
+            }
+            return Ok(carts);
         }
         /// <summary>
         /// Récupère un panier en fonction de l'ID
@@ -44,7 +50,7 @@ namespace Ibay.Controllers
                 .FirstOrDefault(cp => cp.Id == id);
             if (cart is null)
             {
-                return NotFound();
+                return NotFound("No cart found in the database.");
             }
             return Ok(cart);
         }
@@ -59,9 +65,16 @@ namespace Ibay.Controllers
         {
             var user = _cartContext.Users.Find(userId);
             if (user is null) return BadRequest("User not found");
-            cart.User = user;
+            try
+            {
+                cart.User = user;
             _cartContext.Carts.Add(cart);
             _cartContext.SaveChanges();
+            }
+            catch
+            {
+                return BadRequest("Failed to create Cart");
+            }
             return CreatedAtAction(nameof(GetCart), new { id = cart.Id }, cart);
         }
         /// <summary>
@@ -73,7 +86,9 @@ namespace Ibay.Controllers
         public ActionResult UpdateCart([FromQuery] int id, [FromBody] Cart cart)
         {
             if (id != cart.Id)
-                return BadRequest();
+            {
+                return BadRequest("ID in request and Cart object are different");
+            }
             var cartExist = _cartContext.Carts.Where(c => c.Id == id).FirstOrDefault();
             if (cartExist is null) return NotFound(id);
 
@@ -85,7 +100,7 @@ namespace Ibay.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Failed to update Cart");
             }
         }
         /// <summary>
@@ -97,7 +112,7 @@ namespace Ibay.Controllers
         public ActionResult DeleteCart([FromQuery] int id)
         {
             var cartExist = _cartContext.Carts.Where(c => c.Id == id).FirstOrDefault();
-            if (cartExist is null) return NotFound();
+            if (cartExist is null) return NotFound("Cart with id " + id + " not found");
 
             try
             {
@@ -106,7 +121,7 @@ namespace Ibay.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Failed to delete Cart");
             }
         }
     }

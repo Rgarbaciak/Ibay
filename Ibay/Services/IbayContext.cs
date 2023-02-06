@@ -14,7 +14,7 @@ namespace IbayApi.Services
         public IbayContext(DbContextOptions<IbayContext> options) : base(options)
         { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(@"Data Source=MSI\SQLEXPRESS;Initial Catalog=Ibay;Integrated Security=True;Trust Server Certificate=True ");
+        => optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-A1LDGC95\SQLEXPRESS01;Initial Catalog=Ibay;Integrated Security=True;Trust Server Certificate=True ");
 
     }
 }

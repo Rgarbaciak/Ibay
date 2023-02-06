@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClassIbai\ClassIbay.csproj" />
+    <ProjectReference Include="..\Ibay\Ibay.csproj" />
   </ItemGroup>
 
 </Project>

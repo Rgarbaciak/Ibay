@@ -2,7 +2,9 @@ Project Ibay
 Introduction
 Ce projet a pour but de fournir une solution pour une application web qui utilise une base de données. Il utilise Entity Framework (EF) pour gérer les opérations de la base de données et ASP.NET Core pour la logique métier.
 
+
 Prérequis
+
 Avant de commencer à travailler sur ce projet, vous devez avoir les outils suivants installés sur votre ordinateur :
 
 .NET Core 3.1 ou supérieur

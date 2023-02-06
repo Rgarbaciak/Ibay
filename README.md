@@ -23,7 +23,7 @@ Dans Visual Studio, appuyez sur Ctrl + Shift + B pour compiler le projet. Dans V
 
 Une fois le projet compilé avec succès, ouvrez la console de commande dans le répertoire du projet et entrez la commande suivante pour créer la base de données :
 
-$ dotnet ef database update
+``` dotnet ef database update```
 
 ## Utilisation
 
@@ -35,17 +35,13 @@ Ouvrez votre navigateur web et accédez à l'URL http://localhost:5000/ pour acc
 
 Les commandes Entity Framework suivantes sont utilisées pour gérer la base de données :
 
-$ dotnet ef database update
-Crée la base de données si elle n'existe pas et met à jour les tables en fonction des modifications apportées aux modèles.
+``` dotnet ef database update ```: Crée la base de données si elle n'existe pas et met à jour les tables en fonction des modifications apportées aux modèles.
 
-$ dotnet ef migrations add [nom_migration] 
-Ajoute une nouvelle migration pour les modifications apportées aux modèles.
+``` dotnet ef migrations add [nom_migration] ``` :Ajoute une nouvelle migration pour les modifications apportées aux modèles.
 
-$ dotnet ef migrations remove 
-Supprime la dernière migration ajoutée.
+``` dotnet ef migrations remove ``` :Supprime la dernière migration ajoutée.
 
-$ dotnet ef database drop 
-Supprime la base de données.
+``` dotnet ef database drop ``` :Supprime la base de données.
 
 ## Conclusion
 
